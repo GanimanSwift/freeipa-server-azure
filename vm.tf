@@ -58,7 +58,7 @@ resource "azurerm_linux_virtual_machine" "freeipa_vm" {
   name                = var.freeipa_hostname
   resource_group_name = azurerm_resource_group.freeipa_rg.name
   location            = azurerm_resource_group.freeipa_rg.location
-  size                = "Standard_F4s"
+  size                = var.vm_size
   admin_username      = "azureuser"
 
   encryption_at_host_enabled = true
@@ -78,16 +78,16 @@ resource "azurerm_linux_virtual_machine" "freeipa_vm" {
   }
 
   source_image_reference {
-    publisher = "procomputers"
-    offer     = "rocky-lnx-9-minimal"
-    sku       = "rocky-linux-9-minimal"
-    version   = "latest"
+    publisher = var.vm_publisher
+    offer     = var.vm_offer
+    sku       = var.vm_sku
+    version   = var.vm_version
   }
 
   plan {
-    name = "rocky-linux-9-minimal"
-    product = "rocky-lnx-9-minimal"
-    publisher = "procomputers"
+    name = var.plan_name
+    product = var.plan_product
+    publisher = var.plan_publisher
     
   }
 
