@@ -21,7 +21,7 @@ provider "azurerm" {
 }
 
 resource "azurerm_resource_group" "freeipa_rg" {
-  name     = var.rgname
+  name     = "freeipa-${var.environment}-${var.location}-01"
   location = var.azureregion
   tags = {
     Environment = var.environment
