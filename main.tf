@@ -24,6 +24,7 @@ terraform {
 
 provider "azurerm" {
   features {}
+  subscription_id = "${var.azure_sub_id}"
 }
 
 resource "azurerm_resource_group" "freeipa_rg" {

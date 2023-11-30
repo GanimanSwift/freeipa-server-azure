@@ -4,6 +4,11 @@
 
 # Azure Resource Group Settings
 
+variable "azure_sub_id" {
+  description = "Azure Subscription ID"
+  type        = string
+  sensitive   = true
+}
 variable "location" {
   default = "eastus"
 }
