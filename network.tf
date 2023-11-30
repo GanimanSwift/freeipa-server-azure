@@ -19,7 +19,7 @@ resource "azurerm_subnet" "freeipa_subnet" {
   resource_group_name  = azurerm_resource_group.freeipa_rg.name
   virtual_network_name = azurerm_virtual_network.freeipa_vnet.name
   address_prefixes     = ["${phpipam_first_free_subnet.freeipa_subnet.subnet_address}/${phpipam_first_free_subnet.freeipa_subnet.subnet_mask}"]
-  enforce_private_link_endpoint_network_policies = true
+  private_endpoint_network_policies_enabled = true
   depends_on = [azurerm_virtual_network.freeipa_vnet, phpipam_first_free_subnet.freeipa_subnet]
 }
 
@@ -75,5 +75,5 @@ resource "azurerm_virtual_network_peering" "transit_freeipa_peer" {
   name                      = "peer-transit-freeipa-${var.environment}"
   resource_group_name       = var.transit_rg_name
   virtual_network_name      = var.transit_vnet_name
-  remote_virtual_network_id = azurerm_virtual_network.demo_vnet.id
+  remote_virtual_network_id = azurerm_virtual_network.freeipa_vnet.id
 }

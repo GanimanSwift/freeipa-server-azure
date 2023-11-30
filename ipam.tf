@@ -37,6 +37,6 @@ resource "phpipam_first_free_address" "azure_reserved" {
 # Reserve an address.
 resource "phpipam_first_free_address" "freeipa_ip"{
   subnet_id   = phpipam_first_free_subnet.freeipa_subnet.subnet_id
-  hostname    = var.freeipa_hostname
+  hostname    = "${var.freeipa_hostname}.${var.dns_zone_name}"
   description = "Managed by Terraform"
 }

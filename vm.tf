@@ -40,7 +40,10 @@ resource "azurerm_network_interface" "freeipa_nic" {
 data "template_file" "cloud_init" {
   template = file("cloud-init.txt")
   vars = {
-    dbpassword = random_password.dbpassword.result
+    freeipa_realm = var.freeipa_realm
+    freeipa_domain = var.freeipa_domain
+    freeipa_parent_hostname = var.freeipa_parent_hostname
+    letsencrypt_email = var.letsencrypt_email
   }
 }
 
@@ -55,7 +58,7 @@ data "template_cloudinit_config" "config" {
 }
 
 resource "azurerm_linux_virtual_machine" "freeipa_vm" {
-  name                = var.freeipa_hostname
+  name                = "${var.freeipa_hostname}.${var.dns_zone_name}"
   resource_group_name = azurerm_resource_group.freeipa_rg.name
   location            = azurerm_resource_group.freeipa_rg.location
   size                = var.vm_size
@@ -69,7 +72,7 @@ resource "azurerm_linux_virtual_machine" "freeipa_vm" {
 
   admin_ssh_key {
     username   = "azureuser"
-    public_key = var.ssh_public_key
+    public_key = file("${var.ssh_public_key_file}")
   }
 
   os_disk {

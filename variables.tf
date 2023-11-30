@@ -28,11 +28,12 @@ variable "vm_sku" {
 variable "vm_version" {
   default = "latest"
 }
-variable "ssh_public_key" {
+variable "ssh_public_key_file" {
   type        = string
 }
 
 # Azure VM Plan Settings
+
 variable "plan_name" { 
   default = "rocky-linux-9-minimal"
 }
@@ -73,6 +74,7 @@ variable "ipam_parent" {
 }
 
 # FreeIPA Settings
+
 variable "freeipa_username" {
   description = "FreeIPA administrator username"
   type        = string
@@ -87,22 +89,46 @@ variable "freeipa_hostname" {
   description = "FreeIPA hostname"
   type        = string
 }
+variable "freeipa_parent_hostname" {
+  description = "FreeIPA hostname"
+  type        = string
+}
+variable "freeipa_realm" {
+  description = "FreeIPA hostname"
+  type        = string
+}
+variable "freeipa_domain" {
+  description = "FreeIPA hostname"
+  type        = string
+}
 
 # Azure Peering Settings
 variable "transit_rg_name" {
+  description = "Peering transit resource group"
   type        = string
 }
 variable "transit_vnet_name" {
+  description = "Peering transit vnet name"
   type        = string
 }
 variable "transit_sub_id" {
+  description = "Peering Transit subscription ID"
   type        = string
 }
 
 # Azure DNS Settings
+
 variable "dns_zone_name" {
+  description = "DNS Zone Name"
   type        = string
 }
 variable "dns_rg_name" {
+  description = "DNS Resource Group"
+  type        = string
+}
+
+# Letsencrypt Settings
+variable "letsencrypt_email" {
+  description = "Letsencrypt certificates email address"
   type        = string
 }
