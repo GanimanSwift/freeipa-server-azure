@@ -120,6 +120,14 @@ variable "transit_sub_id" {
   description = "Peering Transit subscription ID"
   type        = string
 }
+variable "transit_fw_policy_name" {
+  description = "Peering Transit Firewall Policy Name"
+  type        = string
+}
+variable "transit_fw_ip" {
+  description = "Peering Transit Firewall IP"
+  type        = string
+}
 
 # Azure DNS Settings
 
@@ -132,7 +140,15 @@ variable "dns_rg_name" {
   type        = string
 }
 
+# Azure Firewall Settings
+
+variable "fw_policy_name" {
+  description = "Azure Firewall Policy Name"
+  type        = string
+}
+
 # Letsencrypt Settings
+
 variable "letsencrypt_email" {
   description = "Letsencrypt certificates email address"
   type        = string

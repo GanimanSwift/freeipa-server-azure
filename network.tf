@@ -65,15 +65,42 @@ resource "azurerm_subnet_network_security_group_association" "freeipa_nsg_assoc"
 }
 
 resource "azurerm_virtual_network_peering" "freeipa_transit_peer" {
-  name                      = "peer-freeipa-transit-${var.environment}"
-  resource_group_name       = azurerm_resource_group.freeipa_rg.name
-  virtual_network_name      = azurerm_virtual_network.freeipa_vnet.name
-  remote_virtual_network_id = "/subscriptions/${var.transit_sub_id}/resourceGroups/${var.transit_rg_name}/providers/Microsoft.Network/virtualNetworks/${var.transit_vnet_name}"
+  name                         = "peer-freeipa-transit-${var.environment}"
+  resource_group_name          = azurerm_resource_group.freeipa_rg.name
+  virtual_network_name         = azurerm_virtual_network.freeipa_vnet.name
+  allow_virtual_network_access = true
+  allow_forwarded_traffic      = true
+  allow_gateway_transit        = false
+  use_remote_gateways          = true
+  remote_virtual_network_id    = "/subscriptions/${var.transit_sub_id}/resourceGroups/${var.transit_rg_name}/providers/Microsoft.Network/virtualNetworks/${var.transit_vnet_name}"
 }
 
 resource "azurerm_virtual_network_peering" "transit_freeipa_peer" {
-  name                      = "peer-transit-freeipa-${var.environment}"
-  resource_group_name       = var.transit_rg_name
-  virtual_network_name      = var.transit_vnet_name
-  remote_virtual_network_id = azurerm_virtual_network.freeipa_vnet.id
+  name                         = "peer-transit-freeipa-${var.environment}"
+  resource_group_name          = var.transit_rg_name
+  virtual_network_name         = var.transit_vnet_name
+  allow_virtual_network_access = true
+  allow_forwarded_traffic      = true
+  allow_gateway_transit        = true
+  use_remote_gateways          = false
+  remote_virtual_network_id    = azurerm_virtual_network.freeipa_vnet.id
+}
+
+resource "azurerm_route_table" "freeipa_rt" {
+  name                          = "rt-freeipa-${var.environment}-${var.location}"
+  location                      = var.location
+  resource_group_name           = azurerm_resource_group.freeipa_rg.name
+  disable_bgp_route_propagation = true
+
+  route {
+    name           = "route-internal"
+    address_prefix = "172.16.0.0/12"
+    next_hop_type  = "VirtualAppliance"
+    next_hop_in_ip_address = var.transit_fw_ip
+  }
+}
+
+resource "azurerm_subnet_route_table_association" "freeipa_rt_assoc" {
+  subnet_id      = azurerm_subnet.freeipa_subnet.id
+  route_table_id = azurerm_route_table.freeipa_rt.id
 }

@@ -25,6 +25,7 @@ resource "phpipam_first_free_subnet" "freeipa_subnet" {
   parent_subnet_id = data.phpipam_subnet.subnet.subnet_id
   subnet_mask      = 27
   description      = "subnet-freeipa-${var.environment}-${var.location}"
+  section_id       = data.phpipam_section.section.id
 }
 
 # Reserve first 3 address for Azure gateway and dns
